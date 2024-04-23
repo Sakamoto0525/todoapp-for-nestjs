@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
@@ -18,24 +20,28 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   @ApiTags('tasks')
   findMany() {
     return this.tasksService.findMany();
   }
 
   @Get(':id')
+  @HttpCode(HttpStatus.OK)
   @ApiTags('tasks')
   findOne(@Param('id', new ParseIntPipe()) id: number) {
     return this.tasksService.findOne(id);
   }
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @ApiTags('tasks')
   create(@Body() dto: CreateTasksInputDto) {
     return this.tasksService.create(dto);
   }
 
   @Put(':id')
+  @HttpCode(HttpStatus.OK)
   @ApiTags('tasks')
   update(
     @Param('id', new ParseIntPipe()) id: number,
@@ -45,6 +51,7 @@ export class TasksController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiTags('tasks')
   delete(@Param('id', new ParseIntPipe()) id: number) {
     return this.tasksService.delete(id);

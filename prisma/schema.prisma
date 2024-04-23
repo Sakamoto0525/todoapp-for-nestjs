@@ -17,7 +17,6 @@ model Board {
   id        Int   @id @default(autoincrement())
   title     String
   description String
-  tasks     Task[]
   lanes     Lane[]
   createdAt                   DateTime                    @default(now())
   updatedAt                   DateTime                    @updatedAt
@@ -38,9 +37,8 @@ model Task {
   id        Int   @id @default(autoincrement())
   title     String
   description String
-  board     Board @relation(fields: [boardId], references: [id])
-  boardId   Int
-  lanes     Lane[]
+  lane      Lane @relation(fields: [laneId], references: [id])
+  laneId    Int
   createdAt                   DateTime                    @default(now())
   updatedAt                   DateTime                    @updatedAt
 }

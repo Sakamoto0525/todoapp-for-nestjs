@@ -16,4 +16,9 @@ export class CreateTasksInputDto {
   @IsNumber()
   @ApiProperty({ description: 'ボードID', example: 1 })
   boardId: number;
+
+  @IsInt()
+  @IsNumber()
+  @ApiProperty({ description: 'レーンID', example: 1 })
+  laneId: number;
 }

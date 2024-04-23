@@ -16,7 +16,6 @@ export class TasksService {
   findOne(id: number): Promise<Task> {
     return this.prismaService.task.findUnique({
       where: { id },
-      include: { board: true },
     });
   }
 

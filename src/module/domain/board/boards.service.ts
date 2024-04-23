@@ -15,7 +15,7 @@ export class BoardService {
   findOne(id: number): Promise<Board> {
     return this.prismaService.board.findUnique({
       where: { id },
-      include: { lanes: true },
+      include: { lanes: { include: { tasks: true } } },
     });
   }
 
