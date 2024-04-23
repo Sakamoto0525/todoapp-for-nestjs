@@ -8,7 +8,7 @@ export class BoardController {
 
   @Get()
   @ApiTags('boards')
-  getHello(): string {
-    return this.boardService.getHello();
+  getHello() {
+    return this.boardService.findMany();
   }
 }
