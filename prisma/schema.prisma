@@ -18,6 +18,18 @@ model Board {
   title     String
   description String
   tasks     Task[]
+  lanes     Lane[]
+  createdAt                   DateTime                    @default(now())
+  updatedAt                   DateTime                    @updatedAt
+}
+
+model Lane {
+  id        Int   @id @default(autoincrement())
+  title     String
+  description String
+  board     Board @relation(fields: [boardId], references: [id])
+  boardId   Int
+  tasks     Task[]
   createdAt                   DateTime                    @default(now())
   updatedAt                   DateTime                    @updatedAt
 }
@@ -28,6 +40,7 @@ model Task {
   description String
   board     Board @relation(fields: [boardId], references: [id])
   boardId   Int
+  lanes     Lane[]
   createdAt                   DateTime                    @default(now())
   updatedAt                   DateTime                    @updatedAt
 }
