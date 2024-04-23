@@ -8,7 +8,7 @@ export class TasksController {
 
   @Get()
   @ApiTags('tasks')
-  getHello(): string {
-    return this.tasksService.getHello();
+  findMany() {
+    return this.tasksService.findMany();
   }
 }
