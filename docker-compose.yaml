@@ -20,8 +20,8 @@ services:
       db:
         condition: service_healthy
     ports:
-      - ${_DOCKER_COMPOSE_HOST_PORT_BACKEND:-13000}:3000 # for nestjs
-      - ${_DOCKER_COMPOSE_HOST_PORT_BACKEND_DEBUG:-19229}:9229 # for debug
+      - 3000:3000 # for nestjs
+      - 9229:9229 # for debug
 
   db:
     image: mysql:8.0.32
@@ -33,7 +33,7 @@ services:
       MYSQL_PASSWORD: user
     command: --sql-mode=NO_ENGINE_SUBSTITUTION
     ports:
-      - '${_DOCKER_COMPOSE_HOST_PORT_BACKEND:-13306}:3306'
+      - 3306:3306
     volumes:
       - ./.docker/db/initdb.d:/docker-entrypoint-initdb.d
       - ./.docker/db/my.cnf:/etc/mysql/conf.d/my.cnf

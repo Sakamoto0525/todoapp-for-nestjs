@@ -27,6 +27,4 @@ COPY . .
 
 RUN prisma generate
 
-USER node
-
 CMD [ "npm", "run", "start"]
