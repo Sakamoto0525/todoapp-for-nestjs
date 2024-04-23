@@ -1,0 +1,30 @@
+# https://taskfile.dev
+
+version: '3'
+
+dotenv:
+  - .env
+
+tasks:
+  default:
+    cmds:
+      - task -l
+
+  init:
+    desc: "プロジェクト初期化"
+    cmds:
+      - docker compose down -v
+      - docker compose --profile schemaspy down -v
+      - docker compose up -d db
+      - docker compose build
+      - npm install
+
+  db-apply:
+    desc: "prisma.Schemaの内容をDBに反映、かつコード生成"
+    cmds:
+      - docker compose run --rm backend prisma db push
+  
+  npmi:
+    desc: "npm install"
+    cmds:
+      - docker compose run --rm backend npm install
