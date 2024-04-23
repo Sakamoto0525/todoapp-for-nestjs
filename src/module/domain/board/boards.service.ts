@@ -13,7 +13,10 @@ export class BoardService {
   }
 
   findOne(id: number): Promise<Board> {
-    return this.prismaService.board.findUnique({ where: { id } });
+    return this.prismaService.board.findUnique({
+      where: { id },
+      include: { tasks: true },
+    });
   }
 
   create(dto: CreateBoardsInputDto): Promise<Board> {
