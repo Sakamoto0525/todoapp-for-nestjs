@@ -28,6 +28,13 @@ export class TasksController {
     return this.tasksService.findMany(dto);
   }
 
+  @Get('all')
+  @HttpCode(HttpStatus.OK)
+  @ApiTags('tasks')
+  findAll() {
+    return this.tasksService.findAll();
+  }
+
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   @ApiTags('tasks')

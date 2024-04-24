@@ -19,6 +19,16 @@ describe('BoardsController', () => {
   });
 
   describe('GET /baords', () => {
+    it('200レスポンスが返ること', () => {
+      const dto = {
+        title: 'title',
+        description: 'description',
+      };
+      prismaService.board.create = jest.fn().mockImplementation(() => dto);
+
+      expect(boardController.create(dto)).toEqual(dto);
+    });
+
     it('全件取得できること', () => {
       const aprilFirst = new Date('2021-04-01T00:00:00');
       const want = [

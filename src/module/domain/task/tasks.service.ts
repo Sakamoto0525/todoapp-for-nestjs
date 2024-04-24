@@ -9,10 +9,15 @@ import { FindManyTasksInputDto } from './dto/find-tasks-input.dto';
 export class TasksService {
   constructor(private prismaService: PrismaService) {}
 
+  findAll(): Promise<Task[]> {
+    const tasks = this.prismaService.task.findMany();
+    return tasks;
+  }
+
   findMany(dto: FindManyTasksInputDto): Promise<Task[]> {
     const where = {
       title: dto.title,
-      content: dto.content,
+      description: dto.description,
     };
     const tasks = this.prismaService.task.findMany({ where });
     return tasks;

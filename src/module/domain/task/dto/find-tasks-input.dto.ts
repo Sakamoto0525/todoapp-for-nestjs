@@ -21,8 +21,8 @@ export class FindManyTasksConditionInputDto {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ description: '内容', example: '内容', required: false })
-  content?: string;
+  @ApiProperty({ description: '説明', example: '説明', required: false })
+  description?: string;
 }
 
 export class FindManyTasksInputDto {
@@ -39,7 +39,7 @@ export class FindManyTasksInputDto {
     return this.condition?.title;
   }
 
-  get content(): string | undefined {
-    return this.condition?.content;
+  get description(): string | undefined {
+    return this.condition?.description;
   }
 }
