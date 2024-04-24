@@ -3,13 +3,18 @@ import { Board } from '@prisma/client';
 import { PrismaService } from 'src/module/prisma/prisma.service';
 import { CreateBoardsInputDto } from './dto/create-boards-input.dto';
 import { UpdateBoardsInputDto } from './dto/update-boards-input.dto';
+import { FindManyBoardsInputDto } from './dto/find-boards-input.dto';
 
 @Injectable()
 export class BoardService {
   constructor(private prismaService: PrismaService) {}
 
-  findMany(): Promise<Board[]> {
-    return this.prismaService.board.findMany();
+  findMany(dto: FindManyBoardsInputDto): Promise<Board[]> {
+    const where = {
+      title: dto.title,
+      content: dto.description,
+    };
+    return this.prismaService.board.findMany({ where });
   }
 
   findOne(id: number): Promise<Board> {

@@ -9,11 +9,13 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { BoardService } from './boards.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateBoardsInputDto } from './dto/create-boards-input.dto';
 import { UpdateBoardsInputDto } from './dto/update-boards-input.dto';
+import { FindManyBoardsInputDto } from './dto/find-boards-input.dto';
 
 @Controller('boards')
 export class BoardController {
@@ -22,8 +24,8 @@ export class BoardController {
   @Get()
   @HttpCode(HttpStatus.OK)
   @ApiTags('boards')
-  findMany() {
-    return this.boardService.findMany();
+  findMany(@Query() dto: FindManyBoardsInputDto) {
+    return this.boardService.findMany(dto);
   }
 
   @Get(':id')

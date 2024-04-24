@@ -9,11 +9,13 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateTasksInputDto } from './dto/create-tasks-input.dto';
 import { UpdateTasksInputDto } from './dto/update-tasks-input.dto';
+import { FindManyTasksInputDto } from './dto/find-tasks-input.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -22,8 +24,8 @@ export class TasksController {
   @Get()
   @HttpCode(HttpStatus.OK)
   @ApiTags('tasks')
-  findMany() {
-    return this.tasksService.findMany();
+  findMany(@Query() dto: FindManyTasksInputDto) {
+    return this.tasksService.findMany(dto);
   }
 
   @Get(':id')

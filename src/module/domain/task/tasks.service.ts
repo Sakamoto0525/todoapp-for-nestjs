@@ -3,13 +3,18 @@ import { Task } from '@prisma/client';
 import { PrismaService } from 'src/module/prisma/prisma.service';
 import { CreateTasksInputDto } from './dto/create-tasks-input.dto';
 import { UpdateTasksInputDto } from './dto/update-tasks-input.dto';
+import { FindManyTasksInputDto } from './dto/find-tasks-input.dto';
 
 @Injectable()
 export class TasksService {
   constructor(private prismaService: PrismaService) {}
 
-  findMany(): Promise<Task[]> {
-    const tasks = this.prismaService.task.findMany();
+  findMany(dto: FindManyTasksInputDto): Promise<Task[]> {
+    const where = {
+      title: dto.title,
+      content: dto.content,
+    };
+    const tasks = this.prismaService.task.findMany({ where });
     return tasks;
   }
 
