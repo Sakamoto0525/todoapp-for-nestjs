@@ -18,16 +18,25 @@ describe('BoardsController', () => {
     prismaService = module.get<PrismaService>(PrismaService);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
+  describe('GET /baords', () => {
+    it('全件取得できること', () => {
       const aprilFirst = new Date('2021-04-01T00:00:00');
-      const want = {
-        id: 10,
-        title: 'title',
-        description: 'content',
-        createdAt: aprilFirst,
-        updatedAt: aprilFirst,
-      };
+      const want = [
+        {
+          id: 10,
+          title: 'title',
+          description: 'content',
+          createdAt: aprilFirst,
+          updatedAt: aprilFirst,
+        },
+        {
+          id: 100,
+          title: 'title',
+          description: 'content',
+          createdAt: aprilFirst,
+          updatedAt: aprilFirst,
+        },
+      ];
       prismaService.board.findMany = jest.fn().mockImplementation(() => want);
 
       const dto = {
@@ -35,22 +44,7 @@ describe('BoardsController', () => {
         description: 'description',
       };
 
-      const re = boardController.findMany(dto);
-
-      expect(re['id']).toBe(want.id);
-      expect(re['title']).toBe(want.title);
-      expect(re['description']).toBe(want.description);
-      expect(re['createdAt']).toBe(want.createdAt);
-      expect(re['updatedAt']).toBe(want.updatedAt);
-      // then((result: Board[]) => {
-      //   expect(result).toEqual({
-      //     id: 10,
-      //     title: 'title',
-      //     description: 'content',
-      //     createdAt: aprilFirst,
-      //     updatedAt: aprilFirst,
-      //   });
-      // });
+      expect(boardController.findMany(dto)).toEqual(want);
     });
   });
 });
