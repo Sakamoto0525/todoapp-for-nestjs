@@ -14,31 +14,31 @@ datasource db {
 }
 
 model Board {
-  id        Int   @id @default(autoincrement())
-  title     String
+  id          Int @id @default(autoincrement())
+  title       String
   description String
-  lanes     Lane[]
-  createdAt                   DateTime                    @default(now())
-  updatedAt                   DateTime                    @updatedAt
+  lanes       Lane[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Lane {
-  id        Int   @id @default(autoincrement())
-  title     String
+  id          Int @id @default(autoincrement())
+  title       String
   description String
-  board     Board @relation(fields: [boardId], references: [id])
-  boardId   Int
-  tasks     Task[]
-  createdAt                   DateTime                    @default(now())
-  updatedAt                   DateTime                    @updatedAt
+  board       Board @relation(fields: [boardId], references: [id])
+  boardId     Int
+  tasks       Task[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Task {
-  id        Int   @id @default(autoincrement())
-  title     String
+  id          Int @id @default(autoincrement())
+  title       String
   description String
-  lane      Lane @relation(fields: [laneId], references: [id])
-  laneId    Int
-  createdAt                   DateTime                    @default(now())
-  updatedAt                   DateTime                    @updatedAt
+  lane        Lane @relation(fields: [laneId], references: [id])
+  laneId      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
