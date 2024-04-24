@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Board } from '@prisma/client';
-import { PrismaService } from 'src/module/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { CreateBoardsInputDto } from './dto/create-boards-input.dto';
 import { UpdateBoardsInputDto } from './dto/update-boards-input.dto';
 import { FindManyBoardsInputDto } from './dto/find-boards-input.dto';
@@ -20,7 +20,12 @@ export class BoardService {
   findOne(id: number): Promise<Board> {
     return this.prismaService.board.findUnique({
       where: { id },
-      include: { lanes: { include: { tasks: true } } },
+      include: {
+        lanes: true,
+        // include: {
+        //   tasks: true,
+        // },
+      },
     });
   }
 
