@@ -24,3 +24,13 @@ prisma db pushの出力先をdefaultのnode_modules/.prisma/clientから、
 
 import @prisma/client部分を import @prismaClientにすれば終わり
 
+> ちなみにjestのmoduleNamemapperに追加しないと、テスト実行時に@prismaclinetがnot foundとなる
+
+```
+ "jest": {
+    ...
+    "moduleNameMapper": {
+      "^@prismaClient$": "/app/prisma/client/index" // 追記
+    }
+  }
+```

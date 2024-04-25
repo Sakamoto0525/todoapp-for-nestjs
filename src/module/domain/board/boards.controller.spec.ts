@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BoardController } from './boards.controller';
 import { BoardService } from './boards.service';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '@/module/prisma/prisma.service';
 import * as request from 'supertest';
 
 describe('BoardsController', () => {
