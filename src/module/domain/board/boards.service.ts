@@ -12,7 +12,7 @@ export class BoardService {
   findMany(dto: FindManyBoardsInputDto): Promise<Board[]> {
     const where = {
       title: dto.title,
-      content: dto.description,
+      description: dto.description,
     };
     return this.prismaService.board.findMany({ where });
   }
