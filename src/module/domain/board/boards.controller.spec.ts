@@ -3,6 +3,7 @@ import { BoardController } from './boards.controller';
 import { BoardService } from './boards.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import * as request from 'supertest';
+import { omit } from 'lodash';
 
 describe('BoardsController', () => {
   let boardController: BoardController;
@@ -94,8 +95,7 @@ describe('BoardsController', () => {
         .query({ title: 'title1' })
         .expect(200);
 
-      expect(res.body[0].title).toBe(want.title);
-      expect(res.body[0].description).toBe(want.description);
+      expect(omit(res.body[0], ['id', 'createdAt', 'updatedAt'])).toEqual(want);
       expect(res.body.length).toBe(1);
     });
   });
