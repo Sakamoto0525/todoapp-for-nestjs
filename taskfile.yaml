@@ -28,3 +28,8 @@ tasks:
     desc: "npm install"
     cmds:
       - docker compose run --rm backend npm install
+
+  test:
+    desc: "テスト実行"
+    cmds:
+      - docker compose run --rm backend jest
