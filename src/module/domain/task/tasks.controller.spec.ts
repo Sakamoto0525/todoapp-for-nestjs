@@ -22,14 +22,8 @@ describe('TaskssController', () => {
     appController = module.get<TasksController>(TasksController);
     prismaService = module.get<PrismaService>(PrismaService);
 
-    // await prismaService.$executeRawUnsafe(`TRUNCATE TABLE 'Task' CASCADE`);
-    // await prismaService.$executeRawUnsafe(`TRUNCATE TABLE 'Lane' CASCADE`);
-    // await prismaService.$executeRawUnsafe(`TRUNCATE TABLE 'Board' CASCADE`);
-
-    // Raw query failed. Code: `1064`. Message: `You have an error in your SQL syntax;
-    // check the manual that corresponds to your MySQL server version for the right syntax to use near ''Task' CASCADE' at line 1`
+    // NOTE: 外部キー制約によりTRUNCATEできないため、FOREIGN_KEY_CHECKSを無効化してTRUNCATEする
     await prismaService.$queryRaw`SET FOREIGN_KEY_CHECKS=0`;
-
     await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Task`);
     await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Lane`);
     await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Board`);

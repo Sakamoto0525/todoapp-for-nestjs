@@ -24,6 +24,7 @@ describe('BoardsController', () => {
     // 1. テスト毎に該当するテーブルのレコードを全削除 → テーブル増えるたびに外部キー制約で削除すべき対象も増えるのでだるい
     // 2. テスト毎にトランザクションを張って、テスト終了時にロールバックする → トランザクションの実装が必要
     // 現状は1を採用
+    // NOTE: 外部キー制約によりTRUNCATEできないため、FOREIGN_KEY_CHECKSを無効化してTRUNCATEする
     await prismaService.$queryRaw`SET FOREIGN_KEY_CHECKS=0`;
     await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Task`);
     await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Lane`);
