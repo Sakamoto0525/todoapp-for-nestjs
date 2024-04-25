@@ -1,8 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TasksController } from './tasks.controller';
 import { TasksService } from './tasks.service';
+// Cannot find module '@/module/prisma/prisma.service' from 'src/module/domain/task/tasks.controller.spec.ts'
 import { PrismaService } from '../../prisma/prisma.service';
 import * as request from 'supertest';
+import { omit } from 'lodash';
 
 describe('TaskssController', () => {
   let appController: TasksController;
@@ -20,9 +22,18 @@ describe('TaskssController', () => {
     appController = module.get<TasksController>(TasksController);
     prismaService = module.get<PrismaService>(PrismaService);
 
-    await prismaService.task.deleteMany({});
-    await prismaService.lane.deleteMany({});
-    await prismaService.board.deleteMany({});
+    // await prismaService.$executeRawUnsafe(`TRUNCATE TABLE 'Task' CASCADE`);
+    // await prismaService.$executeRawUnsafe(`TRUNCATE TABLE 'Lane' CASCADE`);
+    // await prismaService.$executeRawUnsafe(`TRUNCATE TABLE 'Board' CASCADE`);
+
+    // Raw query failed. Code: `1064`. Message: `You have an error in your SQL syntax;
+    // check the manual that corresponds to your MySQL server version for the right syntax to use near ''Task' CASCADE' at line 1`
+    await prismaService.$queryRaw`SET FOREIGN_KEY_CHECKS=0`;
+
+    await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Task`);
+    await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Lane`);
+    await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Board`);
+    await prismaService.$queryRaw`SET FOREIGN_KEY_CHECKS=1`;
 
     app = module.createNestApplication();
     await app.init();
@@ -34,7 +45,7 @@ describe('TaskssController', () => {
     });
 
     it('エラー時に、500レスポンスが返ること', async () => {
-      prismaService.board.findMany = jest.fn().mockImplementation(() => {
+      prismaService.task.findMany = jest.fn().mockImplementation(() => {
         throw new Error('error');
       });
 
@@ -62,17 +73,41 @@ describe('TaskssController', () => {
     });
 
     it('', async () => {
-      await prismaService.task.deleteMany({});
+      await prismaService.board.createMany({
+        data: [
+          { title: 'title1', description: 'description1' },
+          { title: 'title2', description: 'description2' },
+        ],
+      });
+
+      await prismaService.lane.createMany({
+        data: [
+          { title: 'title1', description: 'description1', boardId: 1 },
+          { title: 'title2', description: 'description2', boardId: 2 },
+        ],
+      });
+
       const data = [
         { title: 'title1', description: 'description1', laneId: 1 },
+        { title: 'title2', description: 'description2', laneId: 2 },
       ];
       await prismaService.task.createMany({
         data: data,
       });
 
       const tasks = await prismaService.task.findMany();
-      expect(tasks).toEqual(data);
-      console.info(tasks);
+
+      const t = tasks.map((task) => {
+        return omit(task, ['id', 'createdAt', 'updatedAt']);
+      });
+      expect(t).toEqual(data);
+
+      data.forEach(async (object) => {
+        const param = new URLSearchParams();
+        param.set(object.title, object.title);
+        param.set(object.description, object.description);
+        await request(app.getHttpServer()).get(`/tasks?${param}`).expect(200);
+      });
     });
   });
 });

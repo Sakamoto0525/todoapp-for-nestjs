@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Task } from '@prismaClient';
-import { PrismaService } from 'src/module/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { CreateTasksInputDto } from './dto/create-tasks-input.dto';
 import { UpdateTasksInputDto } from './dto/update-tasks-input.dto';
 import { FindManyTasksInputDto } from './dto/find-tasks-input.dto';
@@ -11,6 +11,20 @@ export class TasksService {
 
   findAll(): Promise<Task[]> {
     const tasks = this.prismaService.task.findMany();
+    return tasks;
+  }
+
+  testLike(dto: FindManyTasksInputDto): Promise<Task[]> {
+    const where = {
+      title: {
+        startsWith: dto.title,
+      },
+      description: {
+        startsWith: dto.description,
+      },
+    };
+
+    const tasks = this.prismaService.task.findMany({ where });
     return tasks;
   }
 

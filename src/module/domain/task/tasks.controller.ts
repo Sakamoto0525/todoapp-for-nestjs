@@ -35,6 +35,13 @@ export class TasksController {
     return this.tasksService.findAll();
   }
 
+  @Get('like')
+  @HttpCode(HttpStatus.OK)
+  @ApiTags('tasks')
+  testLike(@Query() dto: FindManyTasksInputDto) {
+    return this.tasksService.testLike(dto);
+  }
+
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   @ApiTags('tasks')

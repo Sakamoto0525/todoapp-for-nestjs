@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BoardController } from './boards.controller';
 import { BoardService } from './boards.service';
-import { PrismaService } from '@/module/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import * as request from 'supertest';
 
 describe('BoardsController', () => {
@@ -23,9 +23,12 @@ describe('BoardsController', () => {
     // 考えた案
     // 1. テスト毎に該当するテーブルのレコードを全削除 → テーブル増えるたびに外部キー制約で削除すべき対象も増えるのでだるい
     // 2. テスト毎にトランザクションを張って、テスト終了時にロールバックする → トランザクションの実装が必要
-    await prismaService.task.deleteMany({});
-    await prismaService.lane.deleteMany({});
-    await prismaService.board.deleteMany({});
+    // 現状は1を採用
+    await prismaService.$queryRaw`SET FOREIGN_KEY_CHECKS=0`;
+    await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Task`);
+    await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Lane`);
+    await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Board`);
+    await prismaService.$queryRaw`SET FOREIGN_KEY_CHECKS=1`;
 
     app = module.createNestApplication();
     await app.init();
@@ -75,7 +78,6 @@ describe('BoardsController', () => {
     it('絞り込みできること', async () => {
       const want = { title: 'title1', description: 'description1' };
 
-      prismaService.board.deleteMany({});
       await prismaService.board.createMany({
         data: [
           want,

@@ -11,8 +11,8 @@ export class BoardService {
 
   findMany(dto: FindManyBoardsInputDto): Promise<Board[]> {
     const where = {
-      title: dto.title,
-      description: dto.description,
+      title: { contains: dto.title },
+      description: { contains: dto.description },
     };
     return this.prismaService.board.findMany({ where });
   }
