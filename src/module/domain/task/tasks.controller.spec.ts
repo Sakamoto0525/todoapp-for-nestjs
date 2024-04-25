@@ -20,7 +20,6 @@ describe('TaskssController', () => {
   });
 
   describe('root', () => {
-    it('200レスポンス')
     it('1件取得', () => {
       const now = new Date();
       const want = {
