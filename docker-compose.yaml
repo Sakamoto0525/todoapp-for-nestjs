@@ -48,19 +48,19 @@ services:
   # commands
   # --------------------------------------------------
 
-  # schemaspy:
-  #   image: schemaspy/schemaspy:6.2.4
-  #   platform: linux/x86_64
-  #   user: root
-  #   volumes:
-  #     - ./.docker/schemaspy/schemaspy.properties:/schemaspy.properties # SchemaSpy Properties File
-  #     - ./doc/definition/db:/output # SchemaSpy Output dir
-  #   depends_on:
-  #     - db
-  #   environment:
-  #     SCHEMASPY_OUTPUT: /output
-  #   profiles:
-  #     - schemaspy
+  schemaspy:
+    image: schemaspy/schemaspy:6.2.4
+    platform: linux/x86_64
+    user: root
+    volumes:
+      - ./.docker/schemaspy/schemaspy.properties:/schemaspy.properties # SchemaSpy Properties File
+      - ./doc/definition/db:/output # SchemaSpy Output dir
+    depends_on:
+      - db
+    environment:
+      SCHEMASPY_OUTPUT: /output
+    profiles:
+      - schemaspy
 
 volumes:
   todoapp-db-volume:
