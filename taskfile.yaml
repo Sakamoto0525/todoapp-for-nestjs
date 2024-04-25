@@ -33,3 +33,8 @@ tasks:
     desc: "テスト実行"
     cmds:
       - docker compose run --rm backend jest
+
+  gen-schemaspy:
+    desc: "SchemaSpyのHTML生成"
+    cmds:
+      - docker compose up schemaspy
