@@ -90,3 +90,7 @@ prisma.user.findMany({
 
 # delete
 
+
+# 参考記事
+
+https://qiita.com/koffee0522/items/92be1826f1a150bfe62e

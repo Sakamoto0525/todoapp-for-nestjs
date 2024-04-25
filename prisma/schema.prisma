@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "./client"
 }
 
 datasource db {
@@ -14,7 +15,7 @@ datasource db {
 }
 
 model Board {
-  id          Int @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
   description String
   lanes       Lane[]
@@ -23,10 +24,10 @@ model Board {
 }
 
 model Lane {
-  id          Int @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
   description String
-  board       Board @relation(fields: [boardId], references: [id])
+  board       Board    @relation(fields: [boardId], references: [id])
   boardId     Int
   tasks       Task[]
   createdAt   DateTime @default(now())
@@ -34,10 +35,10 @@ model Lane {
 }
 
 model Task {
-  id          Int @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
   description String
-  lane        Lane @relation(fields: [laneId], references: [id])
+  lane        Lane     @relation(fields: [laneId], references: [id])
   laneId      Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
