@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Task } from '@prisma/client';
+import { Task } from '@prismaClient';
 import { PrismaService } from 'src/module/prisma/prisma.service';
 import { CreateTasksInputDto } from './dto/create-tasks-input.dto';
 import { UpdateTasksInputDto } from './dto/update-tasks-input.dto';
