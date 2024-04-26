@@ -62,6 +62,22 @@ services:
     profiles:
       - schemaspy
 
+  # dd-agent:
+  #   image: datadog/agent:latest
+  #   ports:
+  #     - 8126:8126
+  #   environment:
+  #     DD_API_KEY: ${DD_API_KEY}
+  #     DD_TAGS: "env:local, service:todoapp-backend"
+  #     DD_APM_ENABLED: "true"
+  #     DD_LOGS_ENABLED: "true"
+  #     DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL: "true"
+  #     DD_AC_EXCLUDE: "name:datadog-agent"
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  #     - /proc/:/host/proc/:ro
+  #     - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+
 volumes:
   todoapp-db-volume:
   todoapp-backend-nodemodules-volume:

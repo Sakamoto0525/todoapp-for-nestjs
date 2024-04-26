@@ -1,0 +1,75 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
+import { LaneService } from './lane.service';
+import { ApiTags } from '@nestjs/swagger';
+import { CreateLaneInputDto } from './dto/create-lane-input.dto';
+import { UpdateLaneInputDto } from './dto/update-lane-input.dto';
+import { FindManyLaneInputDto } from './dto/find-lane-input.dto';
+
+@Controller('lane')
+export class LaneController {
+  constructor(private readonly laneService: LaneService) {}
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  @ApiTags('lane')
+  findMany(@Query() dto: FindManyLaneInputDto) {
+    return this.laneService.findMany(dto);
+  }
+
+  @Get('all')
+  @HttpCode(HttpStatus.OK)
+  @ApiTags('lane')
+  findAll() {
+    return this.laneService.findAll();
+  }
+
+  @Get('like')
+  @HttpCode(HttpStatus.OK)
+  @ApiTags('lane')
+  testLike(@Query() dto: FindManyLaneInputDto) {
+    return this.laneService.testLike(dto);
+  }
+
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiTags('lane')
+  findOne(@Param('id', new ParseIntPipe()) id: number) {
+    return this.laneService.findOne(id);
+  }
+
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  @ApiTags('lane')
+  create(@Body() dto: CreateLaneInputDto) {
+    return this.laneService.create(dto);
+  }
+
+  @Put(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiTags('lane')
+  update(
+    @Param('id', new ParseIntPipe()) id: number,
+    @Body() dto: UpdateLaneInputDto,
+  ) {
+    return this.laneService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiTags('lane')
+  delete(@Param('id', new ParseIntPipe()) id: number) {
+    return this.laneService.delete(id);
+  }
+}
