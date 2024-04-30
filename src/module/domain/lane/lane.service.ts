@@ -9,25 +9,6 @@ import { FindManyLaneInputDto } from './dto/find-lane-input.dto';
 export class LaneService {
   constructor(private prismaService: PrismaService) {}
 
-  findAll(): Promise<Lane[]> {
-    const lane = this.prismaService.lane.findMany();
-    return lane;
-  }
-
-  testLike(dto: FindManyLaneInputDto): Promise<Lane[]> {
-    const where = {
-      title: {
-        startsWith: dto.title,
-      },
-      description: {
-        startsWith: dto.description,
-      },
-    };
-
-    const lane = this.prismaService.lane.findMany({ where });
-    return lane;
-  }
-
   findMany(dto: FindManyLaneInputDto): Promise<Lane[]> {
     const where = {
       title: dto.title,
@@ -40,6 +21,15 @@ export class LaneService {
   findOne(id: number): Promise<Lane> {
     return this.prismaService.lane.findUnique({
       where: { id },
+      include: {
+        tasks: true,
+      },
+    });
+  }
+
+  find(id: number, boardId: number): Promise<Lane> {
+    return this.prismaService.lane.findUnique({
+      where: { id, boardId },
     });
   }
 

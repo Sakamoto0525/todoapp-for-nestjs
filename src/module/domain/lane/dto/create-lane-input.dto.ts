@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateLaneInputDto {
   @IsString()
@@ -12,5 +12,8 @@ export class CreateLaneInputDto {
   @ApiProperty({ description: 'タスクの説明', example: '説明' })
   description: string;
 
-  board: any;
+  @IsInt()
+  @IsNumber()
+  @ApiProperty({ description: 'ボードID', example: 1 })
+  boardId: number;
 }

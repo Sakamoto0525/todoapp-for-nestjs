@@ -54,4 +54,8 @@ export class TasksService {
   delete(id: number): Promise<Task> {
     return this.prismaService.task.delete({ where: { id } });
   }
+
+  deletes(laneId: number): any {
+    return this.prismaService.task.deleteMany({ where: { laneId } });
+  }
 }

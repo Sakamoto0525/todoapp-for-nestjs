@@ -1,25 +1,26 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TasksController } from './tasks.controller';
-import { TasksService } from './tasks.service';
-// Cannot find module '@/module/prisma/prisma.service' from 'src/module/domain/task/tasks.controller.spec.ts'
+import { LaneController } from './lane.controller';
+import { LaneService } from './lane.service';
+// Cannot find module '@/module/prisma/prisma.service' from 'src/module/domain/lane/tasks.controller.spec.ts'
 import { PrismaService } from '../../prisma/prisma.service';
 import * as request from 'supertest';
+import { TasksService } from '../task/tasks.service';
 import { omit } from 'lodash';
 
-describe('TaskssController', () => {
-  let appController: TasksController;
+describe('LaneController', () => {
+  let appController: LaneController;
   let prismaService: PrismaService;
   let app: any;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [],
-      controllers: [TasksController],
-      providers: [TasksService, PrismaService],
-      exports: [PrismaService],
+      controllers: [LaneController],
+      providers: [LaneService, PrismaService, TasksService],
+      // exports: [PrismaService],
     }).compile();
 
-    appController = module.get<TasksController>(TasksController);
+    appController = module.get<LaneController>(LaneController);
     prismaService = module.get<PrismaService>(PrismaService);
 
     // NOTE: 外部キー制約によりTRUNCATEできないため、FOREIGN_KEY_CHECKSを無効化してTRUNCATEする
@@ -35,64 +36,78 @@ describe('TaskssController', () => {
 
   describe('root', () => {
     it('200レスポンスが返ること', async () => {
-      await request(app.getHttpServer()).get('/tasks').expect(200);
+      await request(app.getHttpServer()).get('/lane').expect(200);
     });
 
     it('エラー時に、500レスポンスが返ること', async () => {
-      prismaService.task.findMany = jest.fn().mockImplementation(() => {
+      prismaService.lane.findMany = jest.fn().mockImplementation(() => {
         throw new Error('error');
       });
 
-      await request(app.getHttpServer()).get('/tasks').expect(500);
+      await request(app.getHttpServer()).get('/lane').expect(500);
     });
 
-    it('1件取得', () => {
+    it('全件取得', () => {
       const now = new Date();
-      const want = {
-        id: 2,
-        title: 'title2',
-        description: '2',
+      const want = [
+        {
+          id: 10,
+          title: 'title',
+          description: 'content',
+          createdAt: now,
+          updatedAt: now,
+        },
+        {
+          id: 100,
+          title: 'title',
+          description: 'content',
+          createdAt: now,
+          updatedAt: now,
+        },
+      ];
+      prismaService.lane.findMany = jest.fn().mockImplementation(() => want);
+
+      const dto = {
+        id: 10,
+        title: 'title',
+        description: 'content',
         createdAt: now,
         updatedAt: now,
       };
-      prismaService.task.findMany = jest.fn().mockImplementation(() => want);
-
-      const dto = {
-        title: 'title2',
-        description: '2',
-      };
-
-      const re = appController.findMany(dto);
-      expect(re).toEqual(want);
+      expect(appController.findMany(dto)).toEqual(want);
     });
 
-    it('', async () => {
-      await prismaService.board.createMany({
-        data: [
-          { title: 'title1', description: 'description1' },
-          { title: 'title2', description: 'description2' },
-        ],
-      });
-
+    it('絞り込みできること', async () => {
+      // NOTE: 外部キー制約によりTRUNCATEできないため、FOREIGN_KEY_CHECKSを無効化してTRUNCATEする
+      await prismaService.$queryRaw`SET FOREIGN_KEY_CHECKS=0`;
+      await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Task`);
+      await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Lane`);
+      await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Board`);
+      await prismaService.$queryRaw`SET FOREIGN_KEY_CHECKS=1`;
+      const board = {
+        data: {
+          title: 'タイトル',
+          description: '説明1',
+        },
+      };
+      //ボードを新規に作成
+      await prismaService.board.create(board);
       await prismaService.lane.createMany({
         data: [
           { title: 'title1', description: 'description1', boardId: 1 },
-          { title: 'title2', description: 'description2', boardId: 2 },
+          { title: 'title2', description: 'description2', boardId: 1 },
         ],
       });
 
       const data = [
-        { title: 'title1', description: 'description1', laneId: 1 },
-        { title: 'title2', description: 'description2', laneId: 2 },
+        { title: 'title1', description: 'description1', boardId: 1 },
+        { title: 'title2', description: 'description2', boardId: 1 },
       ];
-      await prismaService.task.createMany({
-        data: data,
-      });
 
-      const tasks = await prismaService.task.findMany();
+      const lanes = await prismaService.lane.findMany();
 
-      const t = tasks.map((task) => {
-        return omit(task, ['id', 'createdAt', 'updatedAt']);
+      const t = lanes.map((lane) => {
+        return omit(lane, ['id', 'createdAt', 'updatedAt']);
       });
       expect(t).toEqual(data);
 
@@ -100,7 +115,7 @@ describe('TaskssController', () => {
         const param = new URLSearchParams();
         param.set(object.title, object.title);
         param.set(object.description, object.description);
-        await request(app.getHttpServer()).get(`/tasks?${param}`).expect(200);
+        await request(app.getHttpServer()).get(`/lane?${param}`).expect(200);
       });
     });
   });

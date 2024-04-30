@@ -1,3 +1,19 @@
-import { CreateLaneInputDto } from './create-lane-input.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsInt, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class UpdateLaneInputDto extends CreateLaneInputDto {}
+export class UpdateLaneInputDto {
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ description: 'タスクのタイトル', example: 'タイトル' })
+  title: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ description: 'タスクの説明', example: '説明' })
+  description: string;
+
+  @IsInt()
+  @IsNumber()
+  @ApiProperty({ description: 'ボードID', example: 1 })
+  boardId?: number;
+}

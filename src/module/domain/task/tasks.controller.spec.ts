@@ -22,13 +22,16 @@ describe('TaskssController', () => {
     appController = module.get<TasksController>(TasksController);
     prismaService = module.get<PrismaService>(PrismaService);
 
-    // NOTE: 外部キー制約によりTRUNCATEできないため、FOREIGN_KEY_CHECKSを無効化してTRUNCATEする
-    await prismaService.$queryRaw`SET FOREIGN_KEY_CHECKS=0`;
-    await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Task`);
-    await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Lane`);
-    await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Board`);
-    await prismaService.$queryRaw`SET FOREIGN_KEY_CHECKS=1`;
-
+    try {
+      // NOTE: 外部キー制約によりTRUNCATEできないため、FOREIGN_KEY_CHECKSを無効化してTRUNCATEする
+      await prismaService.$queryRaw`SET FOREIGN_KEY_CHECKS=0`;
+      await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Task`);
+      await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Lane`);
+      await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Board`);
+      await prismaService.$queryRaw`SET FOREIGN_KEY_CHECKS=1`;
+    } catch (e) {
+      console.log(e);
+    }
     app = module.createNestApplication();
     await app.init();
   });
