@@ -42,5 +42,7 @@
     "WARNING",
     "ENHANCE"
   ],
-  "todo-tree.regex.regex": "(//)\\s*($TAGS).*(\\n\\s*//\\s{2,}.*)*"
+  "todo-tree.regex.regex": "(//)\\s*($TAGS).*(\\n\\s*//\\s{2,}.*)*",
+  "editor.fontSize": 16,
+	"editor.tabSize": 2,
 }
