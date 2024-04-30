@@ -32,7 +32,8 @@ tasks:
   test:
     desc: "テスト実行"
     cmds:
-      - docker compose run --rm backend jest
+      # --runInBank: 複数テストファイルを実行した場合の並列実行を無効にする。なぜなら、テストデータの作成がバッティングしてしまい落ちるテストが存在するから。
+      - docker compose run --rm backend jest --runInBand
 
   gen-schemaspy:
     desc: "SchemaSpyのHTML生成"
