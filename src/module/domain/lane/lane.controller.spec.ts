@@ -6,6 +6,8 @@ import { PrismaService } from '../../prisma/prisma.service';
 import * as request from 'supertest';
 import { TasksService } from '../task/tasks.service';
 import { omit } from 'lodash';
+import { TasksModule } from '../task/tasks.module';
+import { LaneModule } from './lane.module';
 
 describe('LaneController', () => {
   let appController: LaneController;
@@ -14,16 +16,16 @@ describe('LaneController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [],
-      controllers: [LaneController],
-      providers: [LaneService, PrismaService, TasksService],
-      // exports: [PrismaService],
+      imports: [LaneModule],
+      controllers: [],
+      providers: [],
     }).compile();
 
     appController = module.get<LaneController>(LaneController);
     prismaService = module.get<PrismaService>(PrismaService);
 
     // NOTE: 外部キー制約によりTRUNCATEできないため、FOREIGN_KEY_CHECKSを無効化してTRUNCATEする
+    // NOTE: database drop, prisma db push をする方が楽やで
     await prismaService.$queryRaw`SET FOREIGN_KEY_CHECKS=0`;
     await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Task`);
     await prismaService.$executeRawUnsafe(`TRUNCATE TABLE Lane`);

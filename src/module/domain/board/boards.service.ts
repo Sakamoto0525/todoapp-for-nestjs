@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Board } from '@prismaClient';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '@/module/prisma/prisma.service';
 import { CreateBoardsInputDto } from './dto/create-boards-input.dto';
 import { UpdateBoardsInputDto } from './dto/update-boards-input.dto';
 import { FindManyBoardsInputDto } from './dto/find-boards-input.dto';
